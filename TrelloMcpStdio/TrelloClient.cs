@@ -100,6 +100,44 @@ public class TrelloClient
             ?? throw new InvalidOperationException("Resposta inválida ao adicionar item.");
     }
 
+    public async Task<TrelloCard?> UpdateCardAsync(string cardId, string? name, string? desc)
+    {
+        var body = new Dictionary<string, string?>();
+        if (name is not null) body["name"] = name;
+        if (desc is not null) body["desc"] = desc;
+
+        var response = await _http.PutAsync(
+            $"cards/{cardId}?{Auth}",
+            new FormUrlEncodedContent(body!));
+
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadFromJsonAsync<TrelloCard>();
+    }
+
+    public async Task<TrelloCard?> MoveCardAsync(string cardId, string targetListId)
+    {
+        var body = new Dictionary<string, string> { ["idList"] = targetListId };
+
+        var response = await _http.PutAsync(
+            $"cards/{cardId}?{Auth}",
+            new FormUrlEncodedContent(body));
+
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadFromJsonAsync<TrelloCard>();
+    }
+
+    public async Task<TrelloCard?> ArchiveCardAsync(string cardId)
+    {
+        var body = new Dictionary<string, string> { ["closed"] = "true" };
+
+        var response = await _http.PutAsync(
+            $"cards/{cardId}?{Auth}",
+            new FormUrlEncodedContent(body));
+
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadFromJsonAsync<TrelloCard>();
+    }
+
     private static string ToQueryString(Dictionary<string, string> params_) =>
         string.Join("&", params_.Select(kv => $"{Uri.EscapeDataString(kv.Key)}={Uri.EscapeDataString(kv.Value)}"));
 

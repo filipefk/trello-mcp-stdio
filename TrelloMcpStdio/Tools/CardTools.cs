@@ -40,4 +40,34 @@ public static class CardTools
         var card = await client.CreateCardAsync(listId, name, desc, due);
         return $"Card criado com sucesso!\n{JsonSerializer.Serialize(card, JsonOpts)}";
     }
+
+    [McpServerTool, Description("Atualiza o nome e/ou descrição de um card existente no Trello.")]
+    public static async Task<string> UpdateCard(
+        TrelloClient client,
+        [Description("ID do card")] string cardId,
+        [Description("Novo nome do card (null para não alterar)")] string? name = null,
+        [Description("Nova descrição do card (null para não alterar)")] string? desc = null)
+    {
+        var card = await client.UpdateCardAsync(cardId, name, desc);
+        return card is null ? "Card não encontrado." : JsonSerializer.Serialize(card, JsonOpts);
+    }
+
+    [McpServerTool, Description("Move um card para outra coluna (lista) do Trello.")]
+    public static async Task<string> MoveCard(
+        TrelloClient client,
+        [Description("ID do card")] string cardId,
+        [Description("ID da lista de destino")] string targetListId)
+    {
+        var card = await client.MoveCardAsync(cardId, targetListId);
+        return card is null ? "Card não encontrado." : JsonSerializer.Serialize(card, JsonOpts);
+    }
+
+    [McpServerTool, Description("Arquiva um card do Trello (equivale a fechá-lo).")]
+    public static async Task<string> ArchiveCard(
+        TrelloClient client,
+        [Description("ID do card a arquivar")] string cardId)
+    {
+        var card = await client.ArchiveCardAsync(cardId);
+        return card is null ? "Card não encontrado." : JsonSerializer.Serialize(card, JsonOpts);
+    }
 }

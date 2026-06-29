@@ -15,6 +15,9 @@ Construído baseado na documentação da API do Trello: [https://developer.atlas
 | `CreateChecklist` | Cria um checklist em um card pelo ID |
 | `AddCheckItem` | Adiciona um item a um checklist existente |
 | `GetCardChecklists` | Lista todos os checklists de um card, incluindo seus itens |
+| `UpdateCard` | Atualiza o nome e/ou descrição de um card existente |
+| `MoveCard` | Move um card para outra coluna pelo ID da lista de destino |
+| `ArchiveCard` | Arquiva um card (equivale a fechá-lo) |
 | `GetBoardIdByName` | Retorna o ID de um board buscando pelo nome |
 | `GetListIdByName` | Retorna o ID de uma coluna pelo nome, dado o ID do board |
 | `GetListIdByBoardNameAndListName` | Retorna o ID de uma coluna buscando pelos nomes do board e da coluna |
@@ -89,7 +92,7 @@ Isso equivale a adicionar a seguinte entrada no `claude_desktop_config.json`:
 {
   "mcpServers": {
     "trello": {
-      "command": "C:\\caminho\\para\\TrelloMcpStdio\\bin\\Release\\net10.0\\win-x64\\publish\\TrelloMcpStdio.exe",
+      "command": "C:\\caminho\\para\\TrelloMcpStdio\\TrelloMcpStdio.exe",
       "env": {
         "TRELLO_API_KEY": "<sua-chave>",
         "TRELLO_TOKEN": "<seu-token>"
@@ -109,7 +112,7 @@ TrelloMcpStdio/
 ├── TrelloClient.cs     # Wrapper sobre a API REST do Trello; define os models
 └── Tools/
     ├── BoardTools.cs      # Ferramentas GetBoards, GetBoardLists, GetBoardIdByName, GetListIdByName e GetListIdByBoardNameAndListName
-    ├── CardTools.cs       # Ferramentas GetCard, GetCardsOnList e CreateCard
+    ├── CardTools.cs       # Ferramentas GetCard, GetCardsOnList, CreateCard, UpdateCard, MoveCard e ArchiveCard
     └── ChecklistTools.cs  # Ferramentas CreateChecklist, AddCheckItem e GetCardChecklists
 ```
 
