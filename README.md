@@ -1,6 +1,9 @@
 # Trello MCP
 
 Servidor [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) para integração com o Trello, escrito em C# com .NET 10. Permite que agentes de IA listem boards, colunas e cards, além de criar novos cards diretamente no Trello.
+
+É uma **Console App** projetada para rodar localmente na máquina do usuário, comunicando-se com o cliente MCP via **stdio** (entrada e saída padrão). Esse modelo de transporte é o padrão para integração com clientes como o Claude Desktop: o cliente inicia o processo e se comunica diretamente pelo terminal, sem necessidade de servidor HTTP ou porta de rede.
+
 Construído baseado na documentação da API do Trello: [https://developer.atlassian.com/cloud/trello/rest/](https://developer.atlassian.com/cloud/trello/rest/)
 
 ## Ferramentas disponíveis
