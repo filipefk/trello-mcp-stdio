@@ -52,21 +52,21 @@ https://trello.com/1/authorize?expiration=never&scope=read,write&response_type=t
 
 ## Build
 
-Gere o executável com `dotnet publish`. O binário será criado em `TrelloMcp/bin/Release/net10.0/`:
+Gere o executável com `dotnet publish`. O binário será criado em `TrelloMcpStdio/bin/Release/net10.0/`:
 
 **Windows:**
 ```bash
-dotnet publish TrelloMcp/TrelloMcp.csproj -c Release -r win-x64 --self-contained false
+dotnet publish TrelloMcpStdio/TrelloMcpStdio.csproj -c Release -r win-x64 --self-contained false
 ```
 
 **macOS:**
 ```bash
-dotnet publish TrelloMcp/TrelloMcp.csproj -c Release -r osx-x64 --self-contained false
+dotnet publish TrelloMcpStdio/TrelloMcpStdio.csproj -c Release -r osx-x64 --self-contained false
 ```
 
 **Linux:**
 ```bash
-dotnet publish TrelloMcp/TrelloMcp.csproj -c Release -r linux-x64 --self-contained false
+dotnet publish TrelloMcpStdio/TrelloMcpStdio.csproj -c Release -r linux-x64 --self-contained false
 ```
 
 ## Integração com Claude Desktop
@@ -75,12 +75,12 @@ Após o build e com as credenciais do Trello em mãos (veja a seção anterior),
 
 **Windows:**
 ```bash
-claude mcp add trello -e TRELLO_API_KEY=<sua-chave> -e TRELLO_TOKEN=<seu-token> -- "C:\caminho\para\TrelloMcp\bin\Release\net10.0\win-x64\publish\TrelloMcp.exe"
+claude mcp add trello -e TRELLO_API_KEY=<sua-chave> -e TRELLO_TOKEN=<seu-token> -- "C:\caminho\para\TrelloMcpStdio\bin\Release\net10.0\win-x64\publish\TrelloMcpStdio.exe"
 ```
 
 **macOS/Linux:**
 ```bash
-claude mcp add trello -e TRELLO_API_KEY=<sua-chave> -e TRELLO_TOKEN=<seu-token> -- /caminho/para/TrelloMcp/bin/Release/net10.0/linux-x64/publish/TrelloMcp
+claude mcp add trello -e TRELLO_API_KEY=<sua-chave> -e TRELLO_TOKEN=<seu-token> -- /caminho/para/TrelloMcpStdio/bin/Release/net10.0/linux-x64/publish/TrelloMcpStdio
 ```
 
 Isso equivale a adicionar a seguinte entrada no `claude_desktop_config.json`:
@@ -89,7 +89,7 @@ Isso equivale a adicionar a seguinte entrada no `claude_desktop_config.json`:
 {
   "mcpServers": {
     "trello": {
-      "command": "C:\\caminho\\para\\TrelloMcp\\bin\\Release\\net10.0\\win-x64\\publish\\TrelloMcp.exe",
+      "command": "C:\\caminho\\para\\TrelloMcpStdio\\bin\\Release\\net10.0\\win-x64\\publish\\TrelloMcpStdio.exe",
       "env": {
         "TRELLO_API_KEY": "<sua-chave>",
         "TRELLO_TOKEN": "<seu-token>"
@@ -104,7 +104,7 @@ Isso equivale a adicionar a seguinte entrada no `claude_desktop_config.json`:
 O servidor usa `stdio` como transporte MCP, padrão para integração com clientes como o Claude Desktop.
 
 ```
-TrelloMcp/
+TrelloMcpStdio/
 ├── Program.cs          # Bootstrap via IHost; registra TrelloClient e sobe o servidor MCP
 ├── TrelloClient.cs     # Wrapper sobre a API REST do Trello; define os models
 └── Tools/

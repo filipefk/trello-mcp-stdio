@@ -10,10 +10,10 @@ Servidor MCP (Model Context Protocol) para integração com o Trello, escrito em
 
 ```bash
 # Build
-dotnet build TrelloMcp/TrelloMcp.csproj
+dotnet build TrelloMcpStdio/TrelloMcpStdio.csproj
 
 # Executar (requer variáveis de ambiente)
-TRELLO_API_KEY=<key> TRELLO_TOKEN=<token> dotnet run --project TrelloMcp/TrelloMcp.csproj
+TRELLO_API_KEY=<key> TRELLO_TOKEN=<token> dotnet run --project TrelloMcpStdio/TrelloMcpStdio.csproj
 ```
 
 Não há testes automatizados no projeto atualmente.
