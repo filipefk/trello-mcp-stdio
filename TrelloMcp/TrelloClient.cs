@@ -49,17 +49,17 @@ public class TrelloClient
 
     public async Task<TrelloCard> CreateCardAsync(string listId, string name, string? desc = null, string? due = null)
     {
-        var body = new Dictionary<string, string>
+        var qs = new Dictionary<string, string>
         {
             ["idList"] = listId,
             ["name"] = name,
         };
-        if (desc is not null) body["desc"] = desc;
-        if (due is not null) body["due"] = due;
+        if (desc is not null) qs["desc"] = desc;
+        if (due is not null) qs["due"] = due;
 
         var response = await _http.PostAsync(
-            $"cards?{Auth}",
-            new FormUrlEncodedContent(body));
+            $"cards?{Auth}&{ToQueryString(qs)}",
+            content: null);
 
         response.EnsureSuccessStatusCode();
 
@@ -69,15 +69,15 @@ public class TrelloClient
 
     public async Task<TrelloChecklist> CreateChecklistAsync(string cardId, string name)
     {
-        var body = new Dictionary<string, string>
+        var qs = new Dictionary<string, string>
         {
             ["idCard"] = cardId,
             ["name"] = name,
         };
 
         var response = await _http.PostAsync(
-            $"checklists?{Auth}",
-            new FormUrlEncodedContent(body));
+            $"checklists?{Auth}&{ToQueryString(qs)}",
+            content: null);
 
         response.EnsureSuccessStatusCode();
 
@@ -87,18 +87,21 @@ public class TrelloClient
 
     public async Task<TrelloCheckItem> AddCheckItemAsync(string checklistId, string name, bool? @checked = null)
     {
-        var body = new Dictionary<string, string> { ["name"] = name };
-        if (@checked is not null) body["checked"] = @checked.Value ? "true" : "false";
+        var qs = new Dictionary<string, string> { ["name"] = name };
+        if (@checked is not null) qs["checked"] = @checked.Value ? "true" : "false";
 
         var response = await _http.PostAsync(
-            $"checklists/{checklistId}/checkItems?{Auth}",
-            new FormUrlEncodedContent(body));
+            $"checklists/{checklistId}/checkItems?{Auth}&{ToQueryString(qs)}",
+            content: null);
 
         response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadFromJsonAsync<TrelloCheckItem>()
             ?? throw new InvalidOperationException("Resposta inválida ao adicionar item.");
     }
+
+    private static string ToQueryString(Dictionary<string, string> params_) =>
+        string.Join("&", params_.Select(kv => $"{Uri.EscapeDataString(kv.Key)}={Uri.EscapeDataString(kv.Value)}"));
 
     public async Task<List<TrelloChecklist>> GetCardChecklistsAsync(string cardId)
     {

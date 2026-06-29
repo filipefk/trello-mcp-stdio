@@ -1,6 +1,7 @@
 # Trello MCP
 
 Servidor [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) para integração com o Trello, escrito em C# com .NET 10. Permite que agentes de IA listem boards, colunas e cards, além de criar novos cards diretamente no Trello.
+Construído baseado na documentação da API do Trello: [https://developer.atlassian.com/cloud/trello/rest/](https://developer.atlassian.com/cloud/trello/rest/)
 
 ## Ferramentas disponíveis
 
@@ -14,6 +15,9 @@ Servidor [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) para i
 | `CreateChecklist` | Cria um checklist em um card pelo ID |
 | `AddCheckItem` | Adiciona um item a um checklist existente |
 | `GetCardChecklists` | Lista todos os checklists de um card, incluindo seus itens |
+| `GetBoardIdByName` | Retorna o ID de um board buscando pelo nome |
+| `GetListIdByName` | Retorna o ID de uma coluna pelo nome, dado o ID do board |
+| `GetListIdByBoardNameAndListName` | Retorna o ID de uma coluna buscando pelos nomes do board e da coluna |
 
 ## Pré-requisitos
 
@@ -104,7 +108,7 @@ TrelloMcp/
 ├── Program.cs          # Bootstrap via IHost; registra TrelloClient e sobe o servidor MCP
 ├── TrelloClient.cs     # Wrapper sobre a API REST do Trello; define os models
 └── Tools/
-    ├── BoardTools.cs      # Ferramentas GetBoards e GetBoardLists
+    ├── BoardTools.cs      # Ferramentas GetBoards, GetBoardLists, GetBoardIdByName, GetListIdByName e GetListIdByBoardNameAndListName
     ├── CardTools.cs       # Ferramentas GetCard, GetCardsOnList e CreateCard
     └── ChecklistTools.cs  # Ferramentas CreateChecklist, AddCheckItem e GetCardChecklists
 ```
