@@ -66,6 +66,46 @@ public class TrelloClient
         return await response.Content.ReadFromJsonAsync<TrelloCard>()
             ?? throw new InvalidOperationException("Resposta inválida ao criar card.");
     }
+
+    public async Task<TrelloChecklist> CreateChecklistAsync(string cardId, string name)
+    {
+        var body = new Dictionary<string, string>
+        {
+            ["idCard"] = cardId,
+            ["name"] = name,
+        };
+
+        var response = await _http.PostAsync(
+            $"checklists?{Auth}",
+            new FormUrlEncodedContent(body));
+
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadFromJsonAsync<TrelloChecklist>()
+            ?? throw new InvalidOperationException("Resposta inválida ao criar checklist.");
+    }
+
+    public async Task<TrelloCheckItem> AddCheckItemAsync(string checklistId, string name, bool? @checked = null)
+    {
+        var body = new Dictionary<string, string> { ["name"] = name };
+        if (@checked is not null) body["checked"] = @checked.Value ? "true" : "false";
+
+        var response = await _http.PostAsync(
+            $"checklists/{checklistId}/checkItems?{Auth}",
+            new FormUrlEncodedContent(body));
+
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadFromJsonAsync<TrelloCheckItem>()
+            ?? throw new InvalidOperationException("Resposta inválida ao adicionar item.");
+    }
+
+    public async Task<List<TrelloChecklist>> GetCardChecklistsAsync(string cardId)
+    {
+        var result = await _http.GetFromJsonAsync<List<TrelloChecklist>>(
+            $"cards/{cardId}/checklists?{Auth}");
+        return result ?? [];
+    }
 }
 
 public record TrelloBoard(
@@ -83,3 +123,14 @@ public record TrelloCard(
     [property: JsonPropertyName("due")] string? Due,
     [property: JsonPropertyName("idList")] string? IdList,
     [property: JsonPropertyName("url")] string? Url);
+
+public record TrelloChecklist(
+    [property: JsonPropertyName("id")] string Id,
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("idCard")] string IdCard,
+    [property: JsonPropertyName("checkItems")] List<TrelloCheckItem> CheckItems);
+
+public record TrelloCheckItem(
+    [property: JsonPropertyName("id")] string Id,
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("state")] string State);
