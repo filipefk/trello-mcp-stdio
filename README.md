@@ -1,6 +1,6 @@
 # Trello MCP
 
-Servidor [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) para integração com o Trello, escrito em C# com .NET 10. Permite que agentes de IA listem boards, colunas e cards, além de criar novos cards diretamente no Trello.
+Servidor [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) para integração com o Trello, escrito em C# com .NET 10. Permite que agentes de IA listem boards, colunas e cards, criem, atualizem, movam e arquivem cards, gerenciem checklists e etiquetas (labels) diretamente no Trello.
 
 É uma **Console App** projetada para rodar localmente na máquina do usuário, comunicando-se com o cliente MCP via **stdio** (entrada e saída padrão). Esse modelo de transporte é o padrão para integração com clientes como o Claude Desktop: o cliente inicia o processo e se comunica diretamente pelo terminal, sem necessidade de servidor HTTP ou porta de rede.
 
@@ -24,6 +24,10 @@ Construído baseado na documentação da API do Trello: [https://developer.atlas
 | `GetBoardIdByName` | Retorna o ID de um board buscando pelo nome |
 | `GetListIdByName` | Retorna o ID de uma coluna pelo nome, dado o ID do board |
 | `GetListIdByBoardNameAndListName` | Retorna o ID de uma coluna buscando pelos nomes do board e da coluna |
+| `GetBoardLabels` | Lista todas as etiquetas de um board |
+| `CreateLabel` | Cria uma nova etiqueta em um board, com nome e cor opcionais |
+| `AddLabelToCard` | Aplica uma etiqueta existente a um card |
+| `RemoveLabelFromCard` | Remove uma etiqueta de um card |
 
 ## Pré-requisitos
 
@@ -116,7 +120,8 @@ TrelloMcpStdio/
 └── Tools/
     ├── BoardTools.cs      # Ferramentas GetBoards, GetBoardLists, GetBoardIdByName, GetListIdByName e GetListIdByBoardNameAndListName
     ├── CardTools.cs       # Ferramentas GetCard, GetCardsOnList, CreateCard, UpdateCard, MoveCard e ArchiveCard
-    └── ChecklistTools.cs  # Ferramentas CreateChecklist, AddCheckItem e GetCardChecklists
+    ├── ChecklistTools.cs  # Ferramentas CreateChecklist, AddCheckItem e GetCardChecklists
+    └── LabelTools.cs      # Ferramentas GetBoardLabels, CreateLabel, AddLabelToCard e RemoveLabelFromCard
 ```
 
 ## Dependências

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Projeto
 
-Servidor MCP (Model Context Protocol) para integração com o Trello, escrito em C# (.NET 10). Expõe ferramentas que permitem a agentes de IA listar boards, colunas e cards, criar, atualizar, mover e arquivar cards, além de gerenciar checklists dentro de cards.
+Servidor MCP (Model Context Protocol) para integração com o Trello, escrito em C# (.NET 10). Expõe ferramentas que permitem a agentes de IA listar boards, colunas e cards, criar, atualizar, mover e arquivar cards, gerenciar checklists dentro de cards e gerenciar etiquetas (labels).
 
 ## Comandos
 
@@ -30,10 +30,11 @@ Obrigatórias em tempo de execução — sem elas o processo falha na inicializa
 O servidor usa `stdio` como transporte MCP (padrão para integração com clientes como Claude Desktop).
 
 - **`Program.cs`** — bootstrapping via `IHost`; registra `TrelloClient` (via `HttpClient`) e sobe o servidor MCP com `WithStdioServerTransport()` e `WithToolsFromAssembly()` (descobre ferramentas automaticamente por reflexão).
-- **`TrelloClient.cs`** — wrapper sobre a API REST do Trello (`https://api.trello.com/1/`). Também define os records de modelo: `TrelloBoard`, `TrelloList`, `TrelloCard`, `TrelloChecklist`, `TrelloCheckItem`.
+- **`TrelloClient.cs`** — wrapper sobre a API REST do Trello (`https://api.trello.com/1/`). Também define os records de modelo: `TrelloBoard`, `TrelloList`, `TrelloCard`, `TrelloChecklist`, `TrelloCheckItem`, `TrelloLabel`.
 - **`Tools/BoardTools.cs`** — ferramentas MCP de boards: `GetBoards`, `GetBoardLists`, `GetBoardIdByName`, `GetListIdByName`, `GetListIdByBoardNameAndListName`.
 - **`Tools/CardTools.cs`** — ferramentas MCP de cards: `GetCard`, `GetCardsOnList`, `CreateCard`, `UpdateCard`, `MoveCard`, `ArchiveCard`.
 - **`Tools/ChecklistTools.cs`** — ferramentas MCP de checklists: `CreateChecklist`, `AddCheckItem`, `GetCardChecklists`.
+- **`Tools/LabelTools.cs`** — ferramentas MCP de etiquetas: `GetBoardLabels`, `CreateLabel`, `AddLabelToCard`, `RemoveLabelFromCard`.
 
 ## Convenções
 

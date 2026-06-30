@@ -147,6 +147,51 @@ public class TrelloClient
             $"cards/{cardId}/checklists?{Auth}");
         return result ?? [];
     }
+
+    public async Task<List<TrelloLabel>> GetBoardLabelsAsync(string boardId)
+    {
+        var result = await _http.GetFromJsonAsync<List<TrelloLabel>>(
+            $"boards/{boardId}/labels?{Auth}");
+        return result ?? [];
+    }
+
+    public async Task<TrelloLabel> CreateLabelAsync(string boardId, string name, string? color = null)
+    {
+        var qs = new Dictionary<string, string>
+        {
+            ["idBoard"] = boardId,
+            ["name"] = name,
+        };
+        if (color is not null) qs["color"] = color;
+
+        var response = await _http.PostAsync(
+            $"labels?{Auth}&{ToQueryString(qs)}",
+            content: null);
+
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadFromJsonAsync<TrelloLabel>()
+            ?? throw new InvalidOperationException("Resposta inválida ao criar etiqueta.");
+    }
+
+    public async Task AddLabelToCardAsync(string cardId, string labelId)
+    {
+        var qs = new Dictionary<string, string> { ["value"] = labelId };
+
+        var response = await _http.PostAsync(
+            $"cards/{cardId}/idLabels?{Auth}&{ToQueryString(qs)}",
+            content: null);
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task RemoveLabelFromCardAsync(string cardId, string labelId)
+    {
+        var response = await _http.DeleteAsync(
+            $"cards/{cardId}/idLabels/{labelId}?{Auth}");
+
+        response.EnsureSuccessStatusCode();
+    }
 }
 
 public record TrelloBoard(
@@ -175,3 +220,9 @@ public record TrelloCheckItem(
     [property: JsonPropertyName("id")] string Id,
     [property: JsonPropertyName("name")] string Name,
     [property: JsonPropertyName("state")] string State);
+
+public record TrelloLabel(
+    [property: JsonPropertyName("id")] string Id,
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("color")] string? Color,
+    [property: JsonPropertyName("idBoard")] string IdBoard);
